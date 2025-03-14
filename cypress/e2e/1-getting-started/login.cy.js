@@ -16,7 +16,7 @@ describe('Login Page Menu Test', () => {
       cy.visit('http://localhost:8000/login');
     });
 
-    it('should display the login page correctly', () => {
+    it('Should display the login page correctly', () => {
         // Check if the page contains the word 'Login'
         cy.contains('Login')
 
@@ -37,17 +37,25 @@ describe('Login Page Menu Test', () => {
         cy.get('button[type="submit"]').should('exist').and('contain', 'Login');
       });
 
-    it('should show validation errors for invalid login', () => {
+    it('User can not login with invalid NIK credential', () => {
       // Attempt to login with invalid credentials
-
-      cy.get('input[name="password"]').type('invalidPass');
+      cy.get('input[name="nik"]').type('1978.MTK.1225');
+      cy.get('input[name="password"]').type('123456');
       cy.get('button[type="submit"]').click();
 
-      // Verify error message is displayed
-      cy.get('.error-message') // Adjust selector to match your error message element
-        .should('exist')
-        .and('contain', 'Invalid username or password'); // Adjust the text to match your application
+      // Verifikasi bahwa field NIK mendapatkan class "is-invalid"
+      cy.get('input[name="nik"]').should('have.class', 'is-invalid');
     });
+
+    it('User can not login with invalid Pass credential', () => {
+        // Attempt to login with invalid credentials
+        cy.get('input[name="nik"]').type('1978.MTK.1222');
+        cy.get('input[name="password"]').type('456');
+        cy.get('button[type="submit"]').click();
+
+        // Verifikasi bahwa field NIK mendapatkan class "is-invalid"
+        cy.get('input[name="name"]').should('have.class', 'is-invalid');
+      });
 
     it('should login successfully with valid credentials', () => {
       // Enter valid credentials

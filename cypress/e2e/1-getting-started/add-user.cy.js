@@ -569,3 +569,4 @@ describe('Dashboard Menu User Test', () => {
         cy.get('.swal2-title').should('contain', 'GAGAL');
         cy.get('.swal2-html-container').should('contain', `User dengan username ${nik} a/n ${nama} sudah ada`);
 });
+});

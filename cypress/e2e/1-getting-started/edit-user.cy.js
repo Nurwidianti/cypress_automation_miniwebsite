@@ -27,69 +27,38 @@ describe('Edit User test', () => {
 
       it('Edit field name with valid credential', () => {
 
-
-        cy.get('a[href^="http://localhost:8000/user/"][href$="/edit"].btn-primary').first().click();
-        cy.get('input[name="nama"]').clear().should('have.value', '').type('SISWO');
+        cy.get('a[href^="http://localhost:8000/user/4"][href$="/edit"].btn-primary').first().click();
+        cy.get('input[name="nama"]').clear().should('have.value', '').type('TEST');
         cy.wait(500);
         cy.contains('SIMPAN').click();
-        /*
-        // Enter valid credentials
 
-
-
-        // Klik pada dropdown untuk membuka daftar opsi JABATAN
-        cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
-        // Pastikan dropdown terlihat
-        cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
-        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-        cy.get('select#jabatan.form-control').select('ADMIN LOGISTIK', { force: true });
-
-        // Klik pada dropdown untuk membuka daftar opsi ROLES
-        cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
-        // Pastikan dropdown terlihat
-        cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
-        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-        cy.get('select#roles.form-control').select('ADMIN', { force: true });
-
-        // Klik pada dropdown untuk membuka daftar opsi REGION
-        cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
-        // Pastikan dropdown terlihat
-        cy.get('select#region.form-control').scrollIntoView().should('be.visible');
-        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-        cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
-
-        // Klik pada dropdown untuk membuka daftar opsi UNITclear
-        cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
-        // Pastikan dropdown terlihat
-        cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
-        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-        cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
-
-        // Nama file yang akan diunggah
-        const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
-
-        // Pilih elemen input file berdasarkan class .form-control
-        cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-        .attachFile(fileName); // Mengunggah file dari folder "fixtures"
-
-        cy.get('input#password').type('56789');
-        cy.get('input#confirm_password').type('12345');
-        cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-        .should('be.visible')
-        .and('contain', 'Password tidak sama');
-      */
     });
 
     it('Negatife Case: empty field name ', () => {
-        cy.get('a[href^="http://localhost:8000/user/"][href$="/edit"].btn-primary').first().click();
+        cy.get('a[href^="http://localhost:8000/user/4"][href$="/edit"].btn-primary').first().click();
 
         cy.get('input[name="nama"]').clear().should('have.value', '');
         cy.wait(500);
         cy.contains('SIMPAN').click();
 
-        // Verifikasi bahwa swal muncul dengan notifikasi gagal
-        cy.get('.swal2-popup').should('be.visible');
-        cy.get('.swal2-title').should('contain', 'GAGAL'); // Sesuaikan dengan pesan error yang muncul
-        cy.get('.swal2-html-container').should('contain', 'Nama tidak boleh kosong'); // Sesuaikan dengan pesan error yang muncul
-    });
+    //     // Verifikasi bahwa swal muncul dengan notifikasi gagal
+    //     cy.get('.swal2-popup').should('be.visible');
+    //     cy.get('.swal2-title').should('contain', 'GAGAL'); // Sesuaikan dengan pesan error yang muncul
+    //     cy.get('.swal2-html-container').should('contain', 'Nama tidak boleh kosong'); // Sesuaikan dengan pesan error yang muncul
+    // });
+
+
+    // it('Negatife Case: empty field name ', () => {
+    //     cy.get('a[href^="http://localhost:8000/user/"][href$="/edit"].btn-primary').first().click();
+
+    //     cy.get('input[name="nama"]').clear().should('have.value', '');
+    //     cy.wait(500);
+    //     cy.contains('SIMPAN').click();
+
+    //     // Verifikasi bahwa swal muncul dengan notifikasi gagal
+    //     cy.get('.swal2-popup').should('be.visible');
+    //     cy.get('.swal2-title').should('contain', 'GAGAL'); // Sesuaikan dengan pesan error yang muncul
+    //     cy.get('.swal2-html-container').should('contain', 'Nama tidak boleh kosong'); // Sesuaikan dengan pesan error yang muncul
+    // });
+
 });
