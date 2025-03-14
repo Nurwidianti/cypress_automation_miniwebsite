@@ -1,0 +1,45 @@
+table[with-border],
+.table-responsive table[with-border] {
+  border: 0;
+  clear: both;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  max-width: none !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.table-responsive:has(table[with-border]),
+.table-responsive:not(:has(table[with-border])) table[with-border],
+:not(.table-responsive) > table[with-border] {
+  border: 1px solid #333 !important;
+}
+
+table[with-border] th, table[with-border] td {
+  border: 0;
+}
+
+table[with-border] th {
+  text-align: center;
+  vertical-align: middle !important;
+}
+
+table[with-border] thead th {
+  border-bottom: 1px solid #333 !important;
+}
+
+table[with-border] tfoot th {
+  border-top: 1px solid #333 !important;
+}
+
+table[with-border] th:not(:last-child) {
+  border-right: 1px solid #333 !important;
+}
+
+table[with-border] tr:not(:last-child) td {
+  border-bottom: 1px solid #DDD;
+}
+
+table[with-border] td:not(:last-child) {
+  border-right: 1px solid #DDD;
+}

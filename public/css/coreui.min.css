@@ -1,0 +1,151 @@
+.accordion {
+    --cui-accordion-color: rgba(44, 56, 74, 0.95);
+    --cui-accordion-bg: #fff;
+    --cui-accordion-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
+    --cui-accordion-border-color: var(--cui-border-color);
+    --cui-accordion-border-width: 1px;
+    --cui-accordion-border-radius: 0.375rem;
+    --cui-accordion-inner-border-radius: calc(0.375rem - 1px);
+    --cui-accordion-btn-padding-x: 1.25rem;
+    --cui-accordion-btn-padding-y: 1rem;
+    --cui-accordion-btn-color: var(--cui-body-color);
+    --cui-accordion-btn-bg: var(--cui-accordion-bg);
+    --cui-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='var%28--cui-body-color%29'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --cui-accordion-btn-icon-width: 1.25rem;
+    --cui-accordion-btn-icon-transform: rotate(-180deg);
+    --cui-accordion-btn-icon-transition: transform 0.2s ease-in-out;
+    --cui-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%232d1cc5'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --cui-accordion-btn-focus-border-color: #998fed;
+    --cui-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(50, 31, 219, 0.25);
+    --cui-accordion-body-padding-x: 1.25rem;
+    --cui-accordion-body-padding-y: 1rem;
+    --cui-accordion-active-color: #2d1cc5;
+    --cui-accordion-active-bg: #ebe9fb
+}
+
+.accordion-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: var(--cui-accordion-btn-padding-y) var(--cui-accordion-btn-padding-x);
+    font-size: 1rem;
+    color: var(--cui-accordion-btn-color);
+    text-align: left;
+    background-color: var(--cui-accordion-btn-bg);
+    border: 0;
+    border-radius: 0;
+    overflow-anchor: none;
+    transition: var(--cui-accordion-transition)
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .accordion-button {
+        transition: none
+    }
+}
+
+.accordion-button:not(.collapsed) {
+    color: var(--cui-accordion-active-color);
+    background-color: var(--cui-accordion-active-bg);
+    box-shadow: inset 0 calc(var(--cui-accordion-border-width) * -1) 0 var(--cui-accordion-border-color)
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: var(--cui-accordion-btn-active-icon);
+    transform: var(--cui-accordion-btn-icon-transform)
+}
+
+.accordion-button::after {
+    flex-shrink: 0;
+    width: var(--cui-accordion-btn-icon-width);
+    height: var(--cui-accordion-btn-icon-width);
+    margin-left: auto;
+    content: "";
+    background-image: var(--cui-accordion-btn-icon);
+    background-repeat: no-repeat;
+    background-size: var(--cui-accordion-btn-icon-width);
+    transition: var(--cui-accordion-btn-icon-transition)
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .accordion-button::after {
+        transition: none
+    }
+}
+
+.accordion-button:hover {
+    z-index: 2
+}
+
+.accordion-button:focus {
+    z-index: 3;
+    border-color: var(--cui-accordion-btn-focus-border-color);
+    outline: 0;
+    box-shadow: var(--cui-accordion-btn-focus-box-shadow)
+}
+
+.accordion-header {
+    margin-bottom: 0
+}
+
+.accordion-item {
+    color: var(--cui-accordion-color);
+    background-color: var(--cui-accordion-bg);
+    border: var(--cui-accordion-border-width) solid var(--cui-accordion-border-color)
+}
+
+.accordion-item:first-of-type {
+    border-top-left-radius: var(--cui-accordion-border-radius);
+    border-top-right-radius: var(--cui-accordion-border-radius)
+}
+
+.accordion-item:first-of-type .accordion-button {
+    border-top-left-radius: var(--cui-accordion-inner-border-radius);
+    border-top-right-radius: var(--cui-accordion-inner-border-radius)
+}
+
+.accordion-item:not(:first-of-type) {
+    border-top: 0
+}
+
+.accordion-item:last-of-type {
+    border-bottom-right-radius: var(--cui-accordion-border-radius);
+    border-bottom-left-radius: var(--cui-accordion-border-radius)
+}
+
+.accordion-item:last-of-type .accordion-button.collapsed {
+    border-bottom-right-radius: var(--cui-accordion-inner-border-radius);
+    border-bottom-left-radius: var(--cui-accordion-inner-border-radius)
+}
+
+.accordion-item:last-of-type .accordion-collapse {
+    border-bottom-right-radius: var(--cui-accordion-border-radius);
+    border-bottom-left-radius: var(--cui-accordion-border-radius)
+}
+
+.accordion-body {
+    padding: var(--cui-accordion-body-padding-y) var(--cui-accordion-body-padding-x)
+}
+
+.accordion-flush .accordion-collapse {
+    border-width: 0
+}
+
+.accordion-flush .accordion-item {
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0
+}
+
+.accordion-flush .accordion-item:first-child {
+    border-top: 0
+}
+
+.accordion-flush .accordion-item:last-child {
+    border-bottom: 0
+}
+
+.accordion-flush .accordion-item .accordion-button {
+    border-radius: 0
+}
