@@ -131,6 +131,7 @@
 			}
 		});
 
+	/*
         // Validasi password dan confirm password saat submit form
         $('form').on('submit', function (e) {
             const password = $('#password').val();
@@ -171,6 +172,7 @@
                 }
             }
         });
+	*/
 
         // Cek password dan konfirmasi password saat pengguna mengetik
         $('#confirm_password').on('keyup', function () {
