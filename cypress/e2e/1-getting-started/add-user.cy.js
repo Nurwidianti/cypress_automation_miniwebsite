@@ -119,8 +119,8 @@ describe('Dashboard Menu User Test', () => {
         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
 
-        cy.get('input#password').type('56789');
-        cy.get('input#confirm_password').type('56789');
+        cy.get('input#password').type('Nurwidianti35_@');
+        cy.get('input#confirm_password').type('Nurwidianti35_@');
         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
         .should('be.visible')
         .and('contain', 'Password sama');
@@ -181,8 +181,8 @@ describe('Dashboard Menu User Test', () => {
         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
 
-        cy.get('input#password').type('56789');
-        cy.get('input#confirm_password').type('56789');
+        cy.get('input#password').type('Nurwidianti35_@');
+        cy.get('input#confirm_password').type('Nurwidianti35_@');
         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
         .should('be.visible')
         .and('contain', 'Password sama');
@@ -239,8 +239,8 @@ describe('Dashboard Menu User Test', () => {
         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
 
-        cy.get('input#password').type('56789');
-        cy.get('input#confirm_password').type('56789');
+        cy.get('input#password').type('Nurwidianti35_@');
+        cy.get('input#confirm_password').type('Nurwidianti35_@');
         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
         .should('be.visible')
         .and('contain', 'Password sama');
