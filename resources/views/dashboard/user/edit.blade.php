@@ -30,9 +30,8 @@
                                         <th>
                                             <select class="form-control" name="jabatan" id="jabatan">
                                                 @foreach ($jabatan as $jabatans)
-                                                    <option value="{{$jabatans->nama}}">{{$jabatans->nama}}</option>
+                                                    <option value="{{$jabatans->nama}}" {{ $jabatans->nama == $user->jabatan ? 'selected' : '' }}>{{$jabatans->nama}}</option>
                                                 @endforeach
-                                                <option selected value="{{ $user->jabatan }}" hidden>{{ $user->jabatan }}</option>
                                             </select>
                                         </th>
                                     </tr>
@@ -51,9 +50,8 @@
                                         <th> : </th>
                                         <th>
                                             <select class="form-control" name="region" id="region">
-                                                <option value="{{ $userKodeRegion }}" selected hidden>{{ $userRegion }}</option>
                                                 @foreach ($region as $regions)
-                                                    <option value="{{$regions->koderegion}}">{{$regions->namaregion}}</option>
+                                                    <option value="{{$regions->koderegion}}" {{ $regions->koderegion == $user->region ? 'selected' : '' }}>{{$regions->namaregion}}</option>
                                                 @endforeach
                                             </select>
                                         </th>
@@ -63,11 +61,8 @@
                                         <th> : </th>
                                         <th>
                                             <select class="form-control" name="unit" id="unit">
-                                                @foreach ($userUnit as $d)
-                                                    <option selected value="{{ $d->kodeunit }}" hidden>{{ '['.$d->kodeunit.'] '.$d->namaunit }}</option>
-                                                @endforeach
                                                 @foreach ($unit as $u)
-                                                    <option value="{{ $u->kodeunit }}">{{ '['.$u->kodeunit.'] '.$u->namaunit }}</option>
+                                                    <option value="{{ $u->kodeunit }}" {{ $u->kodeunit == $user->unit ? 'selected' : '' }}>{{ '['.$u->kodeunit.'] '.$u->namaunit }}</option>
                                                 @endforeach
                                             </select>
                                         </th>
