@@ -131,7 +131,6 @@
 			}
 		});
 
-	/*
         // Validasi password dan confirm password saat submit form
         $('form').on('submit', function (e) {
             const password = $('#password').val();
@@ -156,23 +155,22 @@
                         timerProgressBar: true
                     });
                 }
-                // Validasi aturan password minimal 8 karakter, harus ada huruf besar, kecil, angka, dan simbol
-                else if (password.length < 8 || !hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
-                    e.preventDefault();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Password harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan karakter khusus.',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true
-                    });
-                }
+                // // Validasi aturan password minimal 8 karakter, harus ada huruf besar, kecil, angka, dan simbol
+                // else if (password.length < 8 || !hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+                //     e.preventDefault();
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: 'Password harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan karakter khusus.',
+                //         toast: true,
+                //         position: 'top-end',
+                //         showConfirmButton: false,
+                //         timer: 3000,
+                //         timerProgressBar: true
+                //     });
+                // }
             }
         });
-	*/
 
         // Cek password dan konfirmasi password saat pengguna mengetik
         $('#confirm_password').on('keyup', function () {
