@@ -145,7 +145,7 @@ describe('Dashboard Menu User Test', () => {
     it('Negatif Case: Empty field Nama', () => {
         cy.contains('TAMBAH').click();
         // Enter valid credentials
-        cy.get('input[name="nik"]').type('1978.MTK.1223');
+        cy.get('input[name="nik"]').type('1978.MTK.1225');
         cy.get('input[name="nama"]').should('have.value', '');
 
         // Klik pada dropdown untuk membuka daftar opsi JABATAN
@@ -194,349 +194,371 @@ describe('Dashboard Menu User Test', () => {
             }
       });
     });
+    it('Negatif Case: Empty field Jabatan', () => {
+        cy.contains('TAMBAH').click();
 
-    // it('Negatif Case: Empty field Jabatan', () => {
-    //     cy.contains('TAMBAH').click();
-    //     // Enter valid credentials
-    //     cy.get('input[name="nik"]').type('1978.MTK.1223');
-    //     cy.get('input[name="nama"]').type('Icha')
+        // Validasi input NIK**
+        cy.get('input[name="nik"]').type('1978.MTK.1225');
+        cy.get('input[name="nik"]').should('not.have.value', ''); // Pastikan tidak kosong
 
-    //     // Jangan pilih apa pun di dropdown JABATAN
-    //     cy.get('select#jabatan.form-control').should('have.value', 'PILIH'); // Asumsikan default value kosong
+        //  Validasi input Nama**
+        cy.get('input[name="nama"]').type('AKUN TIGA');
+        cy.get('input[name="nama"]').should('not.have.value', ''); // Pastikan tidak kosong
 
-    //     // Klik pada dropdown untuk membuka daftar opsi ROLES
-    //     cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
-    //     // Pastikan dropdown terlihat
-    //     cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
-    //     // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-    //     cy.get('select#roles.form-control').select('ADMIN', { force: true });
+        // Jangan pilih apa pun di dropdown JABATAN (biarkan kosong)**
+        cy.get('select#jabatan.form-control').should('have.value', 'PILIH'); // Pastikan tetap default
 
-    //     // Validasi Region & Unit
-    //     cy.validateRegionUnit('PT LAJU SATWA WISESA', ['[HO LSW] HEAD OFFICE PT LSW', '[KDR] KEDIRI', '[JBG] JOMBANG', '[TLA] TULUNGAGUNG']);
+        // Validasi dropdown ROLES**
+        cy.get('select#roles.form-control').select('ADMIN', { force: true });
+        cy.get('select#roles.form-control').should('not.have.value', 'PILIH'); // Pastikan role terpilih
 
-    //     // Klik pada dropdown untuk membuka daftar opsi UNIT
-    //     cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
-    //     // Pastikan dropdown terlihat
-    //     cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
-    //     // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-    //     cy.get('select#unit.form-control').select('[KDR] KEDIRI', { force: true });
+        // Validasi Region & Unit**
+        cy.validateRegionUnit('PT LAWU ABADI NUSA', '[SKH] SUKOHARJO');
 
-    //     // Nama file yang akan diunggah
-    //     const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+        // Validasi unggah file**
+        const fileName = 'download.jpeg';
+        cy.get('input.form-control[type="file"]').attachFile(fileName);
+        cy.get('input.form-control[type="file"]').should('exist'); // ✅ Pastikan elemen ada
+        cy.get('input.form-control[type="file"]').then(($input) => {
+            expect($input[0].files.length).to.be.greaterThan(0); // ✅ Pastikan file telah dipilih
+        });
 
-    //     // Pilih elemen input file berdasarkan class .form-control
-    //     cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-    //     .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+        // Validasi Password & Confirm Password**
+        cy.get('input#password').type('Nurwidianti35_@');
+        cy.get('input#confirm_password').type('Nurwidianti35_@');
+        cy.get('span#message')
+            .should('be.visible')
+            .and('contain', 'Password sama');
 
-    //     cy.get('input#password').type('Nurwidianti35_@');
-    //     cy.get('input#confirm_password').type('Nurwidianti35_@');
-    //     cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-    //     .should('be.visible')
-    //     .and('contain', 'Password sama');
-    //     cy.wait(500);
-    //     cy.contains('SIMPAN').click();
+        cy.wait(500);
 
-    //     // Verifikasi bahwa form tidak terkirim karena validasi required
-    //     cy.get('select#jabatan.form-control')
-    //     .then(($dropdown) => {
-    //     const dropdownElement = $dropdown[0]; // Ambil elemen DOM mentah
-    //     expect(dropdownElement.checkValidity()).to.be.false; // Pastikan validasi gagal
-    //     expect(dropdownElement.validationMessage).to.eq('Please select an item.'); // Sesuaikan pesan jika custom
-    //   });
-    // });
+        // Klik SIMPAN**
+        cy.contains('SIMPAN').click();
 
+       // **Pastikan validasi muncul untuk Jabatan kosong**
+        cy.get('body').then(($body) => {
+            const errorMessages = $body.find('.swal2-popup, .swal2-toast, .error-message, .is-invalid');
 
-//     it('Negatif Case: Empty field Roles', () => {
-//         cy.contains('TAMBAH').click();
-//         // Enter valid credentials
-//         cy.get('input[name="nik"]').type('1978.MTK.1223');
-//         cy.get('input[name="nama"]').type('Icha')
+            // **Jika tidak ada pesan error, tampilkan error**
+            expect(errorMessages.length).to.be.greaterThan(0, 'Tidak ada validasi muncul untuk Jabatan kosong.');
 
-//         // Klik pada dropdown untuk membuka daftar opsi JABATAN
-//         cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#jabatan.form-control').select('DIREKTUR UTAMA', { force: true });
-
-//         // Jangan pilih apa pun di dropdown ROLES
-//         cy.get('select#roles.form-control').should('have.value', ''); // Asumsikan default value kosong
-
-
-//         // Klik pada dropdown untuk membuka daftar opsi REGION
-//         cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#region.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
-
-//         // Klik pada dropdown untuk membuka daftar opsi UNIT
-//         cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
-
-//         // Nama file yang akan diunggah
-//         const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
-
-//         // Pilih elemen input file berdasarkan class .form-control
-//         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-//         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
-
-//         cy.get('input#password').type('56789');
-//         cy.get('input#confirm_password').type('56789');
-//         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-//         .should('be.visible')
-//         .and('contain', 'Password sama');
-//         cy.wait(500);
-//         cy.contains('SIMPAN').click();
-
-//         // Verifikasi bahwa form tidak terkirim karena validasi required
-//         cy.get('select#roles.form-control')
-//         .then(($dropdown) => {
-//         const dropdownElement = $dropdown[0]; // Ambil elemen DOM mentah
-//         expect(dropdownElement.checkValidity()).to.be.false; // Pastikan validasi gagal
-//         expect(dropdownElement.validationMessage).to.eq('Please select an item.'); // Sesuaikan pesan jika custom
-//       });
-//     });
-
-//     it('Negatif Case: Empty field Regions', () => {
-//         cy.contains('TAMBAH').click();
-//         // Enter valid credentials
-//         cy.get('input[name="nik"]').type('1978.MTK.1223');
-//         cy.get('input[name="nama"]').type('Icha')
-
-//         // Klik pada dropdown untuk membuka daftar opsi JABATAN
-//         cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#jabatan.form-control').select('DIREKTUR UTAMA', { force: true });
-
-//         // Klik pada dropdown untuk membuka daftar opsi ROLES
-//         cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#roles.form-control').select('ADMIN', { force: true });
-
-//         // Jangan pilih apa pun di dropdown REGION
-//         cy.get('select#region.form-control').should('have.value', 'PILIH'); // Asumsikan default value kosong
-
-//         // Klik pada dropdown untuk membuka daftar opsi UNIT
-//         cy.get('select#unit.form-control').should('have.text', 'PILIH');
-
-
-//         // Nama file yang akan diunggah
-//         const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
-
-//         // Pilih elemen input file berdasarkan class .form-control
-//         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-//         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
-
-//         cy.get('input#password').type('56789');
-//         cy.get('input#confirm_password').type('56789');
-//         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-//         .should('be.visible')
-//         .and('contain', 'Password sama');
-//         cy.wait(500);
-//         cy.contains('SIMPAN').click();
-
-//         // Verifikasi bahwa form tidak terkirim karena validasi required
-//         cy.get('select#region.form-control')
-//         .then(($dropdown) => {
-//         const dropdownElement = $dropdown[0]; // Ambil elemen DOM mentah
-//         expect(dropdownElement.checkValidity()).to.be.false; // Pastikan validasi gagal
-//         expect(dropdownElement.validationMessage).to.eq('Please select an item.'); // Sesuaikan pesan jika custom
-//       });
-//     });
+            // **Jika validasi tidak muncul, lempar error**
+            if (errorMessages.length === 0) {
+                throw new Error('Validasi tidak muncul ketika Jabatan kosong. Pastikan ada pesan error yang ditampilkan.');
+            }
+        });
 
 
 
-//     it('Negatif Case: Password invalid', () => {
-//         cy.contains('TAMBAH').click();
-//         // Enter valid credentials
-//         cy.get('input[name="nik"]').type('1979.MTK.1223');
-//         cy.get('input[name="nama"]').type('Nur Widianti');
+        // Tambahkan error handling jika form tetap terkirim**
+        cy.get('body').then(($body) => {
+            if ($body.find('.swal2-popup, .swal2-toast').length) {
+                cy.log('ERROR: Form tetap terkirim meskipun Jabatan kosong!');
+                throw new Error('Form tidak boleh terkirim jika Jabatan belum dipilih.');
+            }
+        });
+    });
 
-//         // Klik pada dropdown untuk membuka daftar opsi JABATAN
-//         cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#jabatan.form-control').select('ADMIN LOGISTIK', { force: true });
+    it('Negatif Case: Empty field Roles', () => {
+        cy.contains('TAMBAH').click();
 
-//         // Klik pada dropdown untuk membuka daftar opsi ROLES
-//         cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#roles.form-control').select('ADMIN', { force: true });
+        // Validasi bahwa NIK bisa diketik
+        cy.get('input[name="nik"]').type('1978.MTK.1223');
+        cy.get('input[name="nik"]').should('have.value', '1978.MTK.1223');
 
-//         // Klik pada dropdown untuk membuka daftar opsi REGION
-//         cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#region.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
+        // Validasi bahwa Nama bisa diketik
+        cy.get('input[name="nama"]').type('Icha');
+        cy.get('input[name="nama"]').should('have.value', 'Icha');
 
-//         // Klik pada dropdown untuk membuka daftar opsi UNITclear
-//         cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
+        // Validasi dropdown JABATAN tidak kosong
+        cy.get('select#jabatan.form-control').select('DIREKTUR UTAMA', { force: true });
+        cy.get('select#jabatan.form-control option:selected').should('not.have.text', 'PILIH');
 
-//         // Nama file yang akan diunggah
-//         const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+        // Tidak memilih ROLES (Error Handling)**
+        cy.get('select#roles.form-control').should('have.value', ''); // Asumsikan default kosong
 
-//         // Pilih elemen input file berdasarkan class .form-control
-//         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-//         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+        // ✅ Validasi Region & Unit
+        cy.validateRegionUnit('PT MITRA MAHKOTA BUANA', '[DMK] DEMAK');
 
-//         cy.get('input#password').type('56789');
-//         cy.get('input#confirm_password').type('56789');
-//         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-//         .should('be.visible')
-//         .and('contain', 'Password sama');
-//         cy.contains('SIMPAN').click();
+        // ✅ Validasi input file
+        const fileName = 'download.jpeg';
+        cy.get('input.form-control[type="file"]').attachFile(fileName);
+        cy.get('input.form-control[type="file"]').should('exist');
 
-//         // Periksa apakah SweetAlert muncul dengan pesan yang benar
-//         cy.get('.swal2-popup').should('be.visible');
-//         cy.get('.swal2-title').should('contain', 'Oops...');
-//         cy.get('.swal2-html-container').should('contain', 'Password harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan karakter khusus.');
-//     });
+        // ✅ Validasi Password dan Confirm Password
+        cy.get('input#password').type('56789');
+        cy.get('input#confirm_password').type('56789');
+        cy.get('span#message')
+            .should('be.visible')
+            .and('contain', 'Password sama');
 
-//     it('Add duplikat data', () => {
-//         // Panggil fungsi login dengan NIK dan password yang valid
-//         cy.login('validUser', 'validPassword');
+        cy.wait(500);
+        cy.contains('SIMPAN').click();
 
-//         // Verifikasi bahwa menu "Master" ada di halaman dashboard
-//         cy.get('#sidebar').should('exist').and('be.visible');
-//         cy.contains('Master').click();
-//         cy.contains('Users').click();
+        // **Error Handling untuk ROLES**
+        cy.get('select#roles.form-control').then(($dropdown) => {
+            const dropdownElement = $dropdown[0];
+            expect(dropdownElement.checkValidity()).to.be.false;
+            expect(dropdownElement.validationMessage).to.eq('Please select an item in the list.');
+        });
 
-//         cy.contains('TAMBAH').click();
-//         // Enter valid credentials
-//         // cy.get('input[name="nik"]').type('1979.MTK.1223');
-//         //cy.get('input[name="nama"]').type('Nur Widianti');
-//         const nik = '1979.MTK.1223'; // Bisa diubah sesuai kebutuhan
-//         const nama = 'Nur Widianti';
-//         cy.get('input[name="nik"]').type(nik); // Ganti dengan selector input username yang sesuai
-//         cy.get('input[name="nama"]').type(nama); // Ganti dengan selector input nama yang sesuai
+        // Tambahkan error handling jika form tetap terkirim**
+        cy.get('body').then(($body) => {
+            if ($body.find('.swal2-popup, .swal2-toast').length) {
+                cy.log('ERROR: Form tetap terkirim meskipun Roles kosong!');
+                throw new Error('Form tidak boleh terkirim jika Roles belum dipilih.');
+            }
+        });
 
-//         // Klik pada dropdown untuk membuka daftar opsi JABATAN
-//         cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#jabatan.form-control').select('ADMIN LOGISTIK', { force: true });
+    });
 
-//         // Klik pada dropdown untuk membuka daftar opsi ROLES
-//         cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#roles.form-control').select('ADMIN', { force: true });
 
-//         // Klik pada dropdown untuk membuka daftar opsi REGION
-//         cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#region.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
+    it('Negatif Case: Empty field Regions & Unit', () => {
+        cy.contains('TAMBAH').click();
+        // Enter valid credentials
+        cy.get('input[name="nik"]').type('1978.MTK.1223');
+        cy.get('input[name="nama"]').type('Icha')
 
-//         // Klik pada dropdown untuk membuka daftar opsi UNITclear
-//         cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
+        // Klik pada dropdown untuk membuka daftar opsi JABATAN
+        cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#jabatan.form-control').select('DIREKTUR UTAMA', { force: true });
 
-//         // Nama file yang akan diunggah
-//         const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+        // Klik pada dropdown untuk membuka daftar opsi ROLES
+        cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#roles.form-control').select('ADMIN', { force: true });
 
-//         // Pilih elemen input file berdasarkan class .form-control
-//         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-//         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+        // Jangan pilih apa pun di dropdown REGION
+        cy.get('select#region.form-control').should('have.value', 'PILIH'); // Asumsikan default value kosong
 
-//         cy.get('input#password').type('Nurwidianti35_@');
-//         cy.get('input#confirm_password').type('Nurwidianti35_@');
-//         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-//         .should('be.visible')
-//         .and('contain', 'Password sama');
-//         cy.contains('SIMPAN').click();
+        // Klik pada dropdown untuk membuka daftar opsi UNIT
+        cy.get('select#unit.form-control').should('have.value', 'PILIH');
 
-//         // Periksa apakah SweetAlert muncul dengan pesan kesalahan yang benar
-//         cy.get('.swal2-popup').should('be.visible');
-//         cy.get('.swal2-title').should('contain', 'GAGAL');
-//         cy.get('.swal2-html-container').should('contain', `User dengan username ${nik} a/n ${nama} sudah ada`);
-//     });
 
-//     it('Add valid data', () => {
-//         // Panggil fungsi login dengan NIK dan password yang valid
-//         cy.login('validUser', 'validPassword');
+        // Nama file yang akan diunggah
+        const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
 
-//         // Verifikasi bahwa menu "Master" ada di halaman dashboard
-//         cy.get('#sidebar').should('exist').and('be.visible');
-//         cy.contains('Master').click();
-//         cy.contains('Users').click();
+        // Pilih elemen input file berdasarkan class .form-control
+        cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
+        .attachFile(fileName); // Mengunggah file dari folder "fixtures"
 
-//         cy.contains('TAMBAH').click();
-//         // Enter valid credentials
-//         // cy.get('input[name="nik"]').type('1979.MTK.1223');
-//         //cy.get('input[name="nama"]').type('Nur Widianti');
-//         const nik = '1979.MTK.1224'; // Bisa diubah sesuai kebutuhan
-//         const nama = 'Icha';
-//         cy.get('input[name="nik"]').type(nik); // Ganti dengan selector input username yang sesuai
-//         cy.get('input[name="nama"]').type(nama); // Ganti dengan selector input nama yang sesuai
+        cy.get('input#password').type('56789');
+        cy.get('input#confirm_password').type('56789');
+        cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
+        .should('be.visible')
+        .and('contain', 'Password sama');
+        cy.wait(500);
+        cy.contains('SIMPAN').click();
 
-//         // Klik pada dropdown untuk membuka daftar opsi JABATAN
-//         cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#jabatan.form-control').select('ADMIN LOGISTIK', { force: true });
+        //Tambahkan error handling jika form tetap terkirim**
+        cy.get('body').then(($body) => {
+            if ($body.find('.swal2-popup, .swal2-toast').length) {
+                cy.log('ERROR: Form tetap terkirim meskipun Region & Unit kosong!');
+                throw new Error('Form tidak boleh terkirim jika Region & Unit belum dipilih.');
+            }
+        });
+    });
 
-//         // Klik pada dropdown untuk membuka daftar opsi ROLES
-//         cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#roles.form-control').select('ADMIN', { force: true });
 
-//         // Klik pada dropdown untuk membuka daftar opsi REGION
-//         cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#region.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
 
-//         // Klik pada dropdown untuk membuka daftar opsi UNITclear
-//         cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
-//         // Pastikan dropdown terlihat
-//         cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
-//         // Pilih opsi dari dropdown dengan memaksa jika diperlukan
-//         cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
+    it('Negatif Case: Password invalid', () => {
+        // Tangani error JS yang tidak diharapkan agar tidak gagal test
+        Cypress.on('uncaught:exception', (err, runnable) => {
+        console.error('Unexpected error:', err.message);
+        return false; // mencegah Cypress gagal
+        });
+        cy.contains('TAMBAH').click();
+        // Enter valid credentials
+        cy.get('input[name="nik"]').type('1979.MTK.1227');
+        cy.get('input[name="nama"]').type('Nur Widianti');
 
-//         // Nama file yang akan diunggah
-//         const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+        // Klik pada dropdown untuk membuka daftar opsi JABATAN
+        cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#jabatan.form-control').select('ADMIN LOGISTIK', { force: true });
 
-//         // Pilih elemen input file berdasarkan class .form-control
-//         cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
-//         .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+        // Klik pada dropdown untuk membuka daftar opsi ROLES
+        cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#roles.form-control').select('ADMIN', { force: true });
 
-//         cy.get('input#password').type('Nurwidianti35_@');
-//         cy.get('input#confirm_password').type('Nurwidianti35_@');
-//         cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
-//         .should('be.visible')
-//         .and('contain', 'Password sama');
-//         cy.contains('SIMPAN').click();
+        // Klik pada dropdown untuk membuka daftar opsi REGION
+        cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#region.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
 
-//         // Periksa apakah SweetAlert muncul dengan pesan kesalahan yang benar
-//         cy.get('.swal2-popup').should('be.visible');
-//         cy.get('.swal2-title').should('contain', 'GAGAL');
-//         cy.get('.swal2-html-container').should('contain', `User dengan username ${nik} a/n ${nama} sudah ada`);
-// });
+        // Klik pada dropdown untuk membuka daftar opsi UNITclear
+        cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
+
+        // Nama file yang akan diunggah
+        const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+
+        // Pilih elemen input file berdasarkan class .form-control
+        cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
+        .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+
+        cy.get('input#password').type('56789');
+        cy.get('input#confirm_password').type('56789');
+        cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
+        .should('be.visible')
+        .and('contain', 'Password sama');
+        cy.contains('SIMPAN').click();
+
+        // Tunggu untuk melihat apakah alert muncul
+        cy.wait(1000); // bisa disesuaikan tergantung kecepatan app
+
+        // Error handling: pastikan tidak muncul popup sukses, hanya error
+        cy.get('body').then(($body) => {
+            const popup = $body.find('.swal2-popup');
+            if (popup.length) {
+                const errorText = popup.find('.swal2-html-container').text();
+                if (!errorText.includes('Password harus minimal 8 karakter')) {
+                    cy.log('ERROR: Form terkirim tanpa validasi password yang benar!');
+                    throw new Error('Form tidak boleh terkirim dengan password yang tidak valid.');
+                } else {
+                    cy.log('Validasi password berhasil: pesan error ditampilkan.');
+                }
+            } else {
+                cy.log('ERROR: Tidak ada alert muncul setelah klik SIMPAN.');
+                throw new Error('Expected error alert for invalid password, but no alert was shown.');
+            }
+        });
+    });
+
+    it('Add duplikat data', () => {
+        cy.contains('TAMBAH').click();
+        // Enter valid credentials
+        const nik = '1979.MTK.1224'; // Bisa diubah sesuai kebutuhan
+        const nama = 'TEST AKUN';
+        cy.get('input[name="nik"]').type(nik); // Ganti dengan selector input username yang sesuai
+        cy.get('input[name="nama"]').type(nama); // Ganti dengan selector input nama yang sesuai
+
+        // Klik pada dropdown untuk membuka daftar opsi JABATAN
+        cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#jabatan.form-control').select('STAFF REGION', { force: true });
+
+        // Klik pada dropdown untuk membuka daftar opsi ROLES
+        cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#roles.form-control').select('REGION', { force: true });
+
+        // Klik pada dropdown untuk membuka daftar opsi REGION
+        cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#region.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#region.form-control').select('PT BINTANG TERANG BERSINAR', { force: true });
+
+        // Klik pada dropdown untuk membuka daftar opsi UNITclear
+        cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#unit.form-control').select('[BMA] BUMIAYU', { force: true });
+
+        // Nama file yang akan diunggah
+        const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+
+        // Pilih elemen input file berdasarkan class .form-control
+        cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
+        .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+
+        cy.get('input#password').type('Nurwidianti35_@');
+        cy.get('input#confirm_password').type('Nurwidianti35_@');
+        cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
+        .should('be.visible')
+        .and('contain', 'Password sama');
+        cy.contains('SIMPAN').click();
+
+        // Periksa apakah SweetAlert muncul dengan pesan kesalahan yang benar
+        cy.get('.swal2-popup').should('be.visible');
+        cy.get('.swal2-title').should('contain', 'GAGAL');
+        cy.get('.swal2-html-container').should('contain', `User dengan username ${nik} a/n ${nama} sudah ada`);
+    });
+
+    it('Add valid data', () => {
+        // Panggil fungsi login dengan NIK dan password yang valid
+        cy.login('validUser', 'validPassword');
+
+        // Verifikasi bahwa menu "Master" ada di halaman dashboard
+        cy.get('#sidebar').should('exist').and('be.visible');
+        cy.contains('Master').click();
+        cy.contains('Users').click();
+
+        cy.contains('TAMBAH').click();
+        // Enter valid credentials
+        // cy.get('input[name="nik"]').type('1979.MTK.1223');
+        //cy.get('input[name="nama"]').type('Nur Widianti');
+        const nik = '1979.MTK.1224'; // Bisa diubah sesuai kebutuhan
+        const nama = 'Icha';
+        cy.get('input[name="nik"]').type(nik); // Ganti dengan selector input username yang sesuai
+        cy.get('input[name="nama"]').type(nama); // Ganti dengan selector input nama yang sesuai
+
+        // Klik pada dropdown untuk membuka daftar opsi JABATAN
+        cy.get('select#jabatan.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#jabatan.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#jabatan.form-control').select('ADMIN LOGISTIK', { force: true });
+
+        // Klik pada dropdown untuk membuka daftar opsi ROLES
+        cy.get('select#roles.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#roles.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#roles.form-control').select('ADMIN', { force: true });
+
+        // Klik pada dropdown untuk membuka daftar opsi REGION
+        cy.get('select#region.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#region.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#region.form-control').select('PT MITRA MAHKOTA BUANA', { force: true });
+
+        // Klik pada dropdown untuk membuka daftar opsi UNITclear
+        cy.get('select#unit.form-control option:selected').should('have.text', 'PILIH');
+        // Pastikan dropdown terlihat
+        cy.get('select#unit.form-control').scrollIntoView().should('be.visible');
+        // Pilih opsi dari dropdown dengan memaksa jika diperlukan
+        cy.get('select#unit.form-control').select('[DMK] DEMAK', { force: true });
+
+        // Nama file yang akan diunggah
+        const fileName = 'download.jpeg'; // Ganti dengan nama file Anda
+
+        // Pilih elemen input file berdasarkan class .form-control
+        cy.get('input.form-control[type="file"]') // Selector untuk tombol Choose File
+        .attachFile(fileName); // Mengunggah file dari folder "fixtures"
+
+        cy.get('input#password').type('Nurwidianti35_@');
+        cy.get('input#confirm_password').type('Nurwidianti35_@');
+        cy.get('span#message') // Sesuaikan dengan selector elemen <span> error Anda
+        .should('be.visible')
+        .and('contain', 'Password sama');
+        cy.contains('SIMPAN').click();
+
+        // Periksa apakah SweetAlert muncul dengan pesan kesalahan yang benar
+        cy.get('.swal2-popup').should('be.visible');
+        cy.get('.swal2-title').should('contain', 'GAGAL');
+        cy.get('.swal2-html-container').should('contain', `User dengan username ${nik} a/n ${nama} sudah ada`);
+});
 });
